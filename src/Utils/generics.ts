@@ -1,17 +1,9 @@
 import { Boom } from '@hapi/boom'
 import { createHash, randomBytes } from 'crypto'
 import type Long from 'long'
-
 import { proto } from '../../WAProto/index.js'
-import {
-	DisconnectReason,
-	type BaileysEventEmitter,
-	type BaileysEventMap,
-	type ConnectionState,
-	type WACallUpdateType,
-	type WAMessageKey,
-	type WAVersion
-} from '../Types'
+import type { BaileysEventEmitter, BaileysEventMap, ConnectionState, WACallUpdateType, WAMessageKey, WAVersion } from '../Types'
+import { DisconnectReason } from '../Types'
 import { type BinaryNode, getAllBinaryNodeChildren, jidDecode } from '../WABinary'
 import { sha256 } from './crypto'
 
