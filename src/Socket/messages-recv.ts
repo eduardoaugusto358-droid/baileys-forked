@@ -50,9 +50,9 @@ import {
 	xmppSignedPreKey
 } from '../Utils'
 import { makeMutex } from '../Utils/make-mutex'
+import type { BinaryNode } from '../WABinary'
 import {
 	areJidsSameUser,
-	type BinaryNode,
 	binaryNodeToString,
 	getAllBinaryNodeChildren,
 	getBinaryNodeChild,
