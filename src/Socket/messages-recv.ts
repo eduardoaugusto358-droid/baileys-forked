@@ -40,6 +40,7 @@ import {
 	getNextPreKeys,
 	getStatusFromReceiptType,
 	hkdf,
+	toNumber,
 	MISSING_KEYS_ERROR_TEXT,
 	NACK_REASONS,
 	NO_MESSAGE_FOUND_ERROR_TEXT,
