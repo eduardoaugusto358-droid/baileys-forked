@@ -2,12 +2,20 @@ import { Boom } from '@hapi/boom'
 import { createHash, randomBytes } from 'crypto'
 import type Long from 'long'
 import { proto } from '../../WAProto/index.js'
-import type { BaileysEventEmitter, BaileysEventMap, ConnectionState, WACallUpdateType, WAMessageKey, WAVersion } from '../Types'
+
+const baileysVersion = [2, 3000, 1027934701]
+
+import type {
+	BaileysEventEmitter,
+	BaileysEventMap,
+	ConnectionState,
+	WACallUpdateType,
+	WAMessageKey,
+	WAVersion
+} from '../Types'
 import { DisconnectReason } from '../Types'
 import { type BinaryNode, getAllBinaryNodeChildren, jidDecode } from '../WABinary'
 import { sha256 } from './crypto'
-
-const baileysVersion = [2, 3000, 1027934701]
 
 export const BufferJSON = {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
