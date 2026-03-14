@@ -15,7 +15,8 @@ import { DisconnectReason } from '../Types'
 import { type BinaryNode, getAllBinaryNodeChildren, jidDecode } from '../WABinary'
 import { sha256 } from './crypto'
 
-export const BufferJSON = {
+const baileysVersion = [2, 3000, 1027934701]
+
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	replacer: (k: any, value: any) => {
 		if (Buffer.isBuffer(value) || value instanceof Uint8Array || value?.type === 'Buffer') {
