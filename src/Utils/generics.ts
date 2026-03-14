@@ -1,3 +1,4 @@
+import type Long from 'long'
 import { Boom } from '@hapi/boom'
 import { createHash, randomBytes } from 'crypto'
 import { proto } from '../../WAProto/index.js'
