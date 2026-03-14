@@ -144,7 +144,10 @@ export const makeMessagesRecvSocket = (config: SocketConfig) => {
 		return sendPeerDataOperationMessage(pdoMessage)
 	}
 
-	const requestPlaceholderResend = async (messageKey: WAMessageKey): Promise<string | undefined> => {
+	const requestPlaceholderResend = async (
+		messageKey: WAMessageKey,
+		msgData?: Partial<WAMessage>
+	): Promise<string | undefined> => {
 		if (!authState.creds.me?.id) {
 			throw new Boom('Not authenticated')
 		}
@@ -153,10 +156,12 @@ export const makeMessagesRecvSocket = (config: SocketConfig) => {
 			logger.debug({ messageKey }, 'already requested resend')
 			return
 		} else {
-			await placeholderResendCache.set(messageKey?.id!, true)
+			// Store original message data so PDO response handler can preserve
+			// metadata (LID details, timestamps, etc.) that the phone may omit
+			await placeholderResendCache.set(messageKey?.id!, msgData || true)
 		}
 
-		await delay(5000)
+		await delay(2000)
 
 		if (!placeholderResendCache.get(messageKey?.id!)) {
 			logger.debug({ messageKey }, 'message received while resend requested')
