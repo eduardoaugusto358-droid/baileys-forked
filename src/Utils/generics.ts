@@ -1,8 +1,8 @@
-import type Long from 'long'
 import { Boom } from '@hapi/boom'
 import { createHash, randomBytes } from 'crypto'
+import type Long from 'long'
+
 import { proto } from '../../WAProto/index.js'
-const baileysVersion = [2, 3000, 1027934701]
 import type {
 	BaileysEventEmitter,
 	BaileysEventMap,
@@ -14,6 +14,8 @@ import type {
 import { DisconnectReason } from '../Types'
 import { type BinaryNode, getAllBinaryNodeChildren, jidDecode } from '../WABinary'
 import { sha256 } from './crypto'
+
+const baileysVersion = [2, 3000, 1027934701]
 
 export const BufferJSON = {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -2,6 +2,7 @@ import NodeCache from '@cacheable/node-cache'
 import { Boom } from '@hapi/boom'
 import { randomBytes } from 'crypto'
 import Long from 'long'
+
 import { proto } from '../../WAProto/index.js'
 import {
 	DEFAULT_CACHE_TTLS,
@@ -40,10 +41,10 @@ import {
 	getNextPreKeys,
 	getStatusFromReceiptType,
 	hkdf,
-	toNumber,
 	MISSING_KEYS_ERROR_TEXT,
 	NACK_REASONS,
 	NO_MESSAGE_FOUND_ERROR_TEXT,
+	toNumber,
 	unixTimestampSeconds,
 	xmppPreKey,
 	xmppSignedPreKey

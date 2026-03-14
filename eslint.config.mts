@@ -26,6 +26,7 @@ export default defineConfig([globalIgnores([
     "Example/Example.ts",
     "**/docs",
     "**/proto-extract",
+    "src/__tests__/**",
 ]),
 ...base,
 {
