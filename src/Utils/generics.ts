@@ -17,6 +17,7 @@ import { sha256 } from './crypto'
 
 const baileysVersion = [2, 3000, 1027934701]
 
+export const BufferJSON = {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	replacer: (k: any, value: any) => {
 		if (Buffer.isBuffer(value) || value instanceof Uint8Array || value?.type === 'Buffer') {
