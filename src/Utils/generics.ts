@@ -1,5 +1,4 @@
 import { Boom } from '@hapi/boom'
-import type Long from 'long'
 import { createHash, randomBytes } from 'crypto'
 import { proto } from '../../WAProto/index.js'
 const baileysVersion = [2, 3000, 1027934701]
