@@ -25,7 +25,7 @@
     "build:docs": "typedoc",
     "build": "tsc -P tsconfig.build.json && tsc-esm-fix --tsconfig=tsconfig.build.json --ext=.js",
     "build:dev": "tsc -P tsconfig.build.json && tsc-esm-fix --tsconfig=tsconfig.build.json --ext=.js",
-    "dev": "npx http-server ./lib -p",
+    "dev": "node -e \"const h=require('http');h.createServer((q,r)=>{r.end('Baileys library')}).listen(process.argv[1]?.replace('--port','').trim()||8080)\"",
     "changelog:last": "conventional-changelog -p angular -r 2",
     "changelog:preview": "conventional-changelog -p angular -u",
     "changelog:update": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
