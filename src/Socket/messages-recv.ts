@@ -2,7 +2,6 @@ import NodeCache from '@cacheable/node-cache'
 import { Boom } from '@hapi/boom'
 import { randomBytes } from 'crypto'
 import Long from 'long'
-
 import { proto } from '../../WAProto/index.js'
 import {
 	DEFAULT_CACHE_TTLS,
@@ -50,9 +49,9 @@ import {
 	xmppSignedPreKey
 } from '../Utils'
 import { makeMutex } from '../Utils/make-mutex'
-import type { BinaryNode } from '../WABinary'
 import {
 	areJidsSameUser,
+	type BinaryNode,
 	binaryNodeToString,
 	getAllBinaryNodeChildren,
 	getBinaryNodeChild,
