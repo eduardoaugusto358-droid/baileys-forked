@@ -793,6 +793,7 @@ export const makeSocket = (config: SocketConfig) => {
 
 		scheduleNextPing()
 	}
+
 	/** i have no idea why this exists. pls enlighten me */
 	const sendPassiveIq = (tag: 'passive' | 'active') =>
 		query({
