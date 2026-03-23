@@ -178,6 +178,18 @@ export const makeNoiseHandler = ({
 
 			inBytes = Buffer.concat([inBytes, newData])
 
+			/**
+			 * CONNECTION STABILITY: Guard against unbounded buffer growth.
+			 * If inBytes exceeds MAX_BUFFER_SIZE, the connection is in a
+			 * pathological state (data arriving faster than decryption/parsing
+			 * can consume it). Clear the buffer to prevent OOM.
+			 */
+			if (inBytes.length > MAX_BUFFER_SIZE) {
+				logger.error({ bufferSize: inBytes.length }, 'noise handler buffer exceeded max size, clearing')
+				inBytes = Buffer.alloc(0)
+				return
+			}
+
 			logger.trace(`recv ${newData.length} bytes, total recv ${inBytes.length} bytes`)
 
 			let size = getBytesSize()
@@ -195,6 +207,15 @@ export const makeNoiseHandler = ({
 				onFrame(frame)
 				size = getBytesSize()
 			}
+		},
+		/**
+		 * CONNECTION STABILITY: Release all internal state so the noise
+		 * handler doesn't hold references after disconnect. Called by
+		 * the socket layer during connection teardown.
+		 */
+		destroy: () => {
+			inBytes = Buffer.alloc(0)
+			sentIntro = false
 		}
 	}
 }
