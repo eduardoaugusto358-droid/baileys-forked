@@ -657,10 +657,7 @@ export const makeSocket = (config: SocketConfig) => {
 		 */
 		if (!ws.isClosed && !ws.isClosing) {
 			try {
-				await Promise.race([
-					ws.close(),
-					new Promise<void>(resolve => setTimeout(resolve, 5000))
-				])
+				await Promise.race([ws.close(), new Promise<void>(resolve => setTimeout(resolve, 5000))])
 			} catch {
 				// Ignore close errors — we're tearing down anyway
 			}
@@ -832,7 +829,7 @@ export const makeSocket = (config: SocketConfig) => {
 			})
 		}
 
-		end(new Boom(msg || 'Intentional Logout', { statusCode: DisconnectReason.loggedOut }))
+		void end(new Boom(msg || 'Intentional Logout', { statusCode: DisconnectReason.loggedOut }))
 	}
 
 	const requestPairingCode = async (phoneNumber: string, customPairingCode?: string): Promise<string> => {
@@ -932,7 +929,7 @@ export const makeSocket = (config: SocketConfig) => {
 			await validateConnection()
 		} catch (err: any) {
 			logger.error({ err }, 'error in validating connection')
-			end(err)
+			void end(err)
 		}
 	})
 	ws.on('error', mapWebSocketError(end))
@@ -967,7 +964,7 @@ export const makeSocket = (config: SocketConfig) => {
 
 			const refNode = refNodes.shift()
 			if (!refNode) {
-				end(new Boom('QR refs attempts ended', { statusCode: DisconnectReason.timedOut }))
+				void end(new Boom('QR refs attempts ended', { statusCode: DisconnectReason.timedOut }))
 				return
 			}
 
@@ -1000,7 +997,7 @@ export const makeSocket = (config: SocketConfig) => {
 			await sendNode(reply)
 		} catch (error: any) {
 			logger.info({ trace: error.stack }, 'error in pairing')
-			end(error)
+			void end(error)
 		}
 	})
 	// login complete
@@ -1060,16 +1057,16 @@ export const makeSocket = (config: SocketConfig) => {
 
 		const { reason, statusCode } = getErrorCodeFromStreamError(node)
 
-		end(new Boom(`Stream Errored (${reason})`, { statusCode, data: reasonNode || node }))
+		void end(new Boom(`Stream Errored (${reason})`, { statusCode, data: reasonNode || node }))
 	})
 	// stream fail, possible logout
 	ws.on('CB:failure', (node: BinaryNode) => {
 		const reason = +(node.attrs.reason || 500)
-		end(new Boom('Connection Failure', { statusCode: reason, data: node.attrs }))
+		void end(new Boom('Connection Failure', { statusCode: reason, data: node.attrs }))
 	})
 
 	ws.on('CB:ib,,downgrade_webclient', () => {
-		end(new Boom('Multi-device beta not joined', { statusCode: DisconnectReason.multideviceMismatch }))
+		void end(new Boom('Multi-device beta not joined', { statusCode: DisconnectReason.multideviceMismatch }))
 	})
 
 	ws.on('CB:ib,,offline_preview', async (node: BinaryNode) => {
