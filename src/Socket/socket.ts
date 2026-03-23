@@ -1142,6 +1142,16 @@ export const makeSocket = (config: SocketConfig) => {
 		get user() {
 			return authState.creds.me
 		},
+		/**
+		 * CONNECTION STABILITY: Expose connection health metrics so
+		 * consumers can implement their own health checks or monitoring.
+		 */
+		get connectionHealth() {
+			return {
+				lastMessageReceived: lastDateRecv,
+				consecutivePingFailures
+			}
+		},
 		generateMessageTag,
 		query,
 		waitForMessage,
