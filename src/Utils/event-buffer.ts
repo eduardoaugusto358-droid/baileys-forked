@@ -74,7 +74,15 @@ export const makeEventBuffer = (logger: ILogger): BaileysBufferableEventEmitter 
 	let data = makeBufferData()
 	let isBuffering = false
 	let bufferTimeout: NodeJS.Timeout | null = null
+	let flushPendingTimeout: NodeJS.Timeout | null = null
 	let bufferCount = 0
+	/**
+	 * CONNECTION STABILITY: Track all setTimeout handles created by
+	 * createBufferedFunction so they can be cleared on disconnect.
+	 * Without this, orphaned timeouts fire after the connection is
+	 * torn down, causing errors or keeping memory alive.
+	 */
+	let activeBufferedTimeouts = new Set<NodeJS.Timeout>()
 	const MAX_HISTORY_CACHE_SIZE = 10000 // Limit the history cache size to prevent memory bloat
 	const BUFFER_TIMEOUT_MS = 30000 // 30 seconds
 

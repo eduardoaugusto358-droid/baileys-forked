@@ -364,6 +364,14 @@ export const makeSocket = (config: SocketConfig) => {
 	let qrTimer: NodeJS.Timeout
 	let closed = false
 
+	/**
+	 * CONNECTION STABILITY: Track consecutive keepalive ping failures.
+	 * If pings fail repeatedly, the connection is likely dead even if
+	 * the WebSocket hasn't fired a 'close' event yet.
+	 */
+	let consecutivePingFailures = 0
+	const MAX_PING_FAILURES = 3
+
 	/** log & process any unexpected errors */
 	const onUnexpectedError = (err: Error | Boom, msg: string) => {
 		logger.error({ err }, `unexpected error in '${msg}'`)
