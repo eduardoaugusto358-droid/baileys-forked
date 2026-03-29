@@ -283,8 +283,9 @@ export const decryptMessageNode = (
 									msg: content
 								})
 								break
-							case 'pkmsg':
-							case 'msg':
+						case 'pkmsg':
+						case 'msg':
+						case 'msmsg':
 								msgBuffer = await repository.decryptMessage({
 									jid: decryptionJid,
 									type: e2eType,

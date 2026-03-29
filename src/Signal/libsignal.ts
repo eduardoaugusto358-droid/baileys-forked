@@ -86,6 +86,7 @@ export function makeLibSignalRepository(
 						result = await session.decryptPreKeyWhisperMessage(ciphertext)
 						break
 					case 'msg':
+					case 'msmsg':
 						result = await session.decryptWhisperMessage(ciphertext)
 						break
 				}
