@@ -1,27 +1,31 @@
 
 
-## Corrigir 12 erros de lint nos 3 arquivos editados
+## Adicionar suporte ao tipo de encriptação `msmsg`
 
-Todos os erros são de formatação/estilo — zero mudança de lógica.
+Fix de 1 linha no switch de decriptação.
 
-### 1. `src/Socket/Client/websocket.ts` (1 erro)
-**Linha 68**: `padding-line-between-statements` — precisa de linha em branco antes de `this.socketListeners.clear()`
+### Alteração
 
-### 2. `src/Utils/event-buffer.ts` (2 erros)
-**Linha 85**: `prefer-const` — trocar `let` por `const` em `activeBufferedTimeouts`
-**Linha 242**: `padding-line-between-statements` — adicionar linha em branco antes de `activeBufferedTimeouts.clear()`
+**`src/Utils/decode-wa-message.ts`** — linha 287:
 
-### 3. `src/Socket/socket.ts` (9 erros)
-**Linha 660**: `prettier/prettier` — colocar `Promise.race([ws.close(), new Promise<void>(...)])` em uma só linha
-**Linha 800**: `padding-line-between-statements` — adicionar linha em branco antes de `const sendPassiveIq`
-**Linha 835**: `no-floating-promises` — adicionar `void` antes de `end(...)`
-**Linha 935**: `no-floating-promises` — adicionar `void` antes de `end(err)`
-**Linha 970**: `no-floating-promises` — adicionar `void` antes de `end(new Boom(...))`
-**Linha 1003**: `no-floating-promises` — adicionar `void` antes de `end(error)`
-**Linha 1063**: `no-floating-promises` — adicionar `void` antes de `end(new Boom(...))`
-**Linha 1068**: `no-floating-promises` — adicionar `void` antes de `end(new Boom(...))`
-**Linha 1072**: `no-floating-promises` — adicionar `void` antes de `end(new Boom(...))`
+Antes:
+```ts
+case 'pkmsg':
+case 'msg':
+```
 
-### Nota
-Os `no-floating-promises` acontecem porque `end()` é async e o lint exige `void end(...)` quando o resultado não é awaited. Vários desses já estavam no código original sem `void` — o lint agora os detecta porque mudamos `end()`. Vamos corrigir todos.
+Depois:
+```ts
+case 'pkmsg':
+case 'msg':
+case 'msmsg':
+```
+
+O `msmsg` é tratado exatamente como `msg`/`pkmsg` — passa pela mesma chamada `repository.decryptMessage()` com o `e2eType` como parâmetro. Zero risco, zero breaking change.
+
+### Por que funciona
+O `msmsg` é um tipo de mensagem Signal que o WhatsApp usa em certas conversas LID. A decriptação é idêntica a `msg` — a diferença é apenas no nome do tipo no envelope. O `decryptMessage` do libsignal já sabe lidar com ele internamente.
+
+### Resultado esperado
+Mensagens que antes eram descartadas silenciosamente (gerando o comportamento de "mensagem fantasma") passarão a ser decriptadas e emitidas normalmente via `messages.upsert`.
 
